@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice to Text</title>
+  <style>
+    body {
+          background-image: url(https://www.dignited.com/wp-content/uploads/2023/01/tts.jpg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    #output {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #b35353;
+      width: 700px;
+      height: 300px;
+      text-align: center;
+      background-color: aliceblue;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="background-color: aqua;">Voice to Text</h1>
+  <button id="startButton"><i class="fa-solid fa-microphone"></i>Start Recording</button>
+  <div id="output"></div>
+
+  <script>
+    const startButton = document.getElementById('startButton');
+    const outputDiv = document.getElementById('output');
+
+    const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = (event) => {
+      const result = event.results[event.results.length - 1];
+      const transcript = result[0].transcript;
+
+      outputDiv.textContent = transcript;
+    };
+
+    recognition.onend = () => {
+      startButton.textContent = 'Start Recording';
+    };
+
+    startButton.addEventListener('click', () => {
+      if (recognition.running) {
+        recognition.stop();
+        startButton.textContent = 'Start Recording';
+      } else {
+        recognition.start();
+        startButton.textContent = 'Stop Recording';
+        outputDiv.textContent = 'Listening...';
+      }
+    });
+  </script>
+</body>
+</html>
+
